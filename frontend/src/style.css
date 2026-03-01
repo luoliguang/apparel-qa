@@ -1,0 +1,164 @@
+/* stylelint-disable at-rule-no-unknown */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+/* stylelint-enable at-rule-no-unknown */
+
+:root {
+  --bg-base: #06070d;
+  --bg-surface: #0d1117;
+  --bg-elevated: #161b27;
+  --bg-hover: #1e2639;
+
+  --accent-blue: #4f9fff;
+  --accent-purple: #a78bfa;
+  --accent-teal: #2dd4bf;
+
+  --text-primary: #f0f4ff;
+  --text-secondary: #9ba8c4;
+  --text-muted: #5a6685;
+
+  --border-subtle: rgba(255, 255, 255, 0.06);
+  --border-bright: rgba(255, 255, 255, 0.14);
+  --border-accent: rgba(79, 159, 255, 0.3);
+
+  --bg-grad-1: rgba(79, 159, 255, 0.1);
+  --bg-grad-2: rgba(167, 139, 250, 0.1);
+  --bg-grad-3: rgba(45, 212, 191, 0.06);
+  --nav-panel-bg: rgba(13, 17, 23, 0.9);
+  --glass-bg: rgba(255, 255, 255, 0.04);
+  --preview-panel-bg: rgba(10, 18, 40, 0.92);
+  --nav-link-hover-bg: rgba(255, 255, 255, 0.08);
+  --nav-link-active-bg: rgba(79, 159, 255, 0.2);
+  --nav-link-active-color: #dbeafe;
+
+  --sp-1: 0.25rem;
+  --sp-2: 0.5rem;
+  --sp-3: 0.75rem;
+  --sp-4: 1rem;
+  --sp-6: 1.5rem;
+  --sp-8: 2rem;
+  --sp-12: 3rem;
+
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --radius-full: 9999px;
+
+  --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.5);
+  --shadow-glow: 0 0 40px rgba(79, 159, 255, 0.12);
+  --shadow-glow-strong: 0 0 60px rgba(79, 159, 255, 0.25);
+
+  font-family: 'Space Grotesk', 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  line-height: 1.6;
+  font-weight: 400;
+  color: var(--text-primary);
+  background-color: var(--bg-base);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+:root[data-theme='light'] {
+  --bg-base: #f4f7ff;
+  --bg-surface: #ffffff;
+  --bg-elevated: #eef3ff;
+  --bg-hover: #e3ebff;
+
+  --text-primary: #14223e;
+  --text-secondary: #4a5e86;
+  --text-muted: #6f7f9e;
+
+  --border-subtle: rgba(20, 34, 62, 0.1);
+  --border-bright: rgba(20, 34, 62, 0.2);
+  --border-accent: rgba(79, 159, 255, 0.35);
+
+  --bg-grad-1: rgba(79, 159, 255, 0.14);
+  --bg-grad-2: rgba(167, 139, 250, 0.12);
+  --bg-grad-3: rgba(45, 212, 191, 0.1);
+  --nav-panel-bg: rgba(255, 255, 255, 0.92);
+  --glass-bg: rgba(255, 255, 255, 0.72);
+  --preview-panel-bg: rgba(255, 255, 255, 0.95);
+  --nav-link-hover-bg: rgba(79, 159, 255, 0.12);
+  --nav-link-active-bg: rgba(79, 159, 255, 0.2);
+  --nav-link-active-color: #10213f;
+
+  --shadow-card: 0 8px 24px rgba(19, 36, 76, 0.12);
+  --shadow-glow: 0 0 30px rgba(79, 159, 255, 0.18);
+  --shadow-glow-strong: 0 0 45px rgba(79, 159, 255, 0.24);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  overflow-x: hidden;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(79, 159, 255, 0.35) transparent;
+  scrollbar-gutter: stable both-edges;
+}
+
+body {
+  background-color: var(--bg-base);
+  background-image:
+    radial-gradient(ellipse at 15% 40%, var(--bg-grad-1) 0%, transparent 55%),
+    radial-gradient(ellipse at 85% 10%, var(--bg-grad-2) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 100%, var(--bg-grad-3) 0%, transparent 55%);
+  background-attachment: fixed;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+input,
+textarea,
+select {
+  font-family: inherit;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(79, 159, 255, 0.25);
+  border-radius: var(--radius-full);
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1), transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal.revealed,
+.reveal {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

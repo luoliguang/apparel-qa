@@ -1,0 +1,42 @@
+# OS / Editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+.cursor/
+
+# Logs
+*.log
+logs/
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Node modules (root or nested)
+node_modules/
+**/node_modules/
+
+# Build outputs
+**/dist/
+**/build/
+**/.turbo/
+
+# TypeScript
+*.tsbuildinfo
+
+# Prisma generated artifacts
+**/generated/prisma/
+
+# Runtime/upload/cache files (keep placeholder if needed)
+**/uploads/*
+!**/uploads/.gitkeep
+
+# Package manager / system temp
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+*.tmp
+*.temp

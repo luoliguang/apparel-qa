@@ -1,0 +1,160 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id                Int                      @id @default(autoincrement())
+  email             String                   @unique
+  passwordHash      String
+  role              UserRole                 @default(CUSTOMER)
+  nickname          String?
+  avatarUrl         String?
+  createdAt         DateTime                 @default(now())
+  updatedAt         DateTime                 @updatedAt
+  questions         Question[]
+  customerQuestions CustomerQuestion[]
+  answers           CustomerQuestionAnswer[] @relation("UserAnswers")
+  notifications     Notification[]
+}
+
+enum UserRole {
+  ADMIN
+  CUSTOMER
+}
+
+model Category {
+  id          Int        @id @default(autoincrement())
+  name        String
+  description String?
+  questions   Question[]
+
+  @@index([name])
+}
+
+model Tag {
+  id        Int        @id @default(autoincrement())
+  name      String     @unique
+  questions QuestionTag[]
+
+  @@index([name])
+}
+
+model Question {
+  id          Int            @id @default(autoincrement())
+  title       String
+  content     String
+  visibility  Visibility     @default(PUBLIC)
+  viewCount   Int            @default(0)
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+  category    Category?      @relation(fields: [categoryId], references: [id])
+  categoryId  Int?
+  createdBy   User?          @relation(fields: [createdById], references: [id])
+  createdById Int?
+  images      QuestionImage[]
+  tags        QuestionTag[]
+  linkedAnswers CustomerQuestionAnswer[] @relation("LinkedQuestionAnswers")
+
+  @@index([createdAt])
+  @@index([viewCount])
+  @@index([visibility, createdAt])
+  @@index([categoryId, createdAt])
+}
+
+enum Visibility {
+  PUBLIC
+  LOGGED_IN
+  PRIVATE
+}
+
+model QuestionTag {
+  question   Question @relation(fields: [questionId], references: [id])
+  questionId Int
+  tag        Tag      @relation(fields: [tagId], references: [id])
+  tagId      Int
+
+  @@id([questionId, tagId])
+}
+
+model QuestionImage {
+  id         Int      @id @default(autoincrement())
+  imageUrl   String
+  description String?
+  question   Question @relation(fields: [questionId], references: [id])
+  questionId Int
+}
+
+model CustomerQuestion {
+  id          Int                      @id @default(autoincrement())
+  title       String
+  description String
+  status      CustomerQuestionStatus   @default(PENDING)
+  createdAt   DateTime                 @default(now())
+  updatedAt   DateTime                 @updatedAt
+  customer    User                     @relation(fields: [customerId], references: [id])
+  customerId  Int
+  images      CustomerQuestionImage[]
+  answers     CustomerQuestionAnswer[]
+
+  @@index([customerId, createdAt])
+  @@index([status, createdAt])
+}
+
+enum CustomerQuestionStatus {
+  PENDING
+  ANSWERED
+  CLOSED
+}
+
+enum NotificationType {
+  QUESTION_SUBMITTED
+  QUESTION_ANSWERED
+  QUESTION_STATUS_CHANGED
+}
+
+model Notification {
+  id         Int              @id @default(autoincrement())
+  userId     Int
+  user       User             @relation(fields: [userId], references: [id])
+  type       NotificationType
+  title      String
+  content    String
+  relatedType String?
+  relatedId  Int?
+  isRead     Boolean          @default(false)
+  createdAt  DateTime         @default(now())
+
+  @@index([userId, isRead, createdAt])
+  @@index([userId, createdAt])
+}
+
+model CustomerQuestionImage {
+  id                 Int              @id @default(autoincrement())
+  imageUrl           String
+  customerQuestion   CustomerQuestion @relation(fields: [customerQuestionId], references: [id])
+  customerQuestionId Int
+}
+
+model CustomerQuestionAnswer {
+  id                 Int              @id @default(autoincrement())
+  answerContent      String
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+  customerQuestion   CustomerQuestion @relation(fields: [customerQuestionId], references: [id])
+  customerQuestionId Int
+  answeredBy         User?            @relation("UserAnswers", fields: [answeredById], references: [id])
+  answeredById       Int?
+  linkedQuestion     Question?        @relation("LinkedQuestionAnswers", fields: [linkedQuestionId], references: [id])
+  linkedQuestionId   Int?
+}
